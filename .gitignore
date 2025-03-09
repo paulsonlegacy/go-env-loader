@@ -1,0 +1,8 @@
+# Ignore binary files
+*.exe
+*.out
+*.test
+*.txt
+
+# Ignore .env files
+.env
