@@ -32,13 +32,20 @@ func LoadEnv(filePath string) (map[string]string, error) {
 }
 
 // GetEnv fetches a specific key from the .env file
-func GetEnv(filePath, key string) (string, error) {
+func GetEnv(filePath, key string, defaultValue ...string) (string, error) {
+	// Load ENV file
 	envMap, err := LoadEnv(filePath)
 	if err != nil {
 		return "", err
 	}
+
+	// Fetch key value from env content
 	value, exists := envMap[key]
 	if !exists {
+		// If a default value was provided, return it
+		if len(defaultValue) > 0  {
+			return defaultValue[0], nil
+		}
 		return "", nil
 	}
 	return value, nil

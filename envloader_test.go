@@ -72,3 +72,31 @@ func TestGetEnv(t *testing.T) {
 		}
 	}
 }
+
+func TestGetEnvWithDefault(t *testing.T) {
+	fileName, err := createTestEnvFile()
+	if err != nil {
+		t.Fatalf("Failed to create test.env file: %v", err)
+	}
+	defer os.Remove(fileName)
+
+	tests := []struct {
+		key          string
+		defaultValue string
+		expected     string
+	}{
+		{"ANOTHER_KEY", "FallbackValue", "AnotherValue"},  // Key exists
+		{"NON_EXISTENT", "FallbackValue", "FallbackValue"}, // Key missing, use default
+		{"EMPTY_KEY", "FallbackValue", ""},                // Empty value (should not use default)
+	}
+
+	for _, test := range tests {
+		value, err := GetEnv(fileName, test.key, test.defaultValue)
+		if err != nil {
+			t.Fatalf("Expected no error, got %v", err)
+		}
+		if value != test.expected {
+			t.Errorf("For key %s: expected %q, got %q", test.key, test.expected, value)
+		}
+	}
+}

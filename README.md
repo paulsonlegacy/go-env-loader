@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	value, err := envloader.GetEnv(".env", "MY_SECRET_KEY")
+	value, err := envloader.GetEnv(".env", "MY_SECRET_KEY", "OPTIONAL_DEFAULT_VALUE")
 	if err != nil {
 		log.Fatal("Error loading .env file:", err)
 	}
@@ -28,3 +28,4 @@ func main() {
 }
 ```
 
+*NB - .env files store values as strings, so any fetched value is naturally a string. Even if a value looks like a number (PORT=8080), it's still a string ("8080").*
